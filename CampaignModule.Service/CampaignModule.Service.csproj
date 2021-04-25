@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CampaignModule.Domain\CampaignModule.Domain.csproj" />
+    <ProjectReference Include="..\CampaignModule.Utilities\CampaignModule.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>
