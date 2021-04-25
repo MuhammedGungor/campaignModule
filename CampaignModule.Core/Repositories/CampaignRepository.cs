@@ -41,7 +41,7 @@ namespace CampaignModule.Core.Repositories
             if (campaignList != null && campaignList.Count == 0)
                 throw new Exception(Constants.ProductConstant.ProductsEmpty);
 
-            var campaign = campaignList.First(c => c.ProductCode == id);
+            var campaign = campaignList.FirstOrDefault(c => c.Name.Equals(id));
 
             if (campaign == null)
                 throw new Exception(Constants.CampaignConstant.CampaignNotFound);

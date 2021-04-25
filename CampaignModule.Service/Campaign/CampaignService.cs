@@ -17,7 +17,7 @@ namespace CampaignModule.Service.Campaign
 
         public async Task<string> CreateAsync(List<string> commands)
         {
-            var campaignItem = new CampaignItem(name: commands[1], code: commands[2], duration:commands[3], priceManipulationLimit:commands[4],targetSalesCount:commands[5]);
+            var campaignItem = new CampaignItem(name: commands[1], code: commands[2], duration:commands[3], priceManipulationLimit:commands[4],targetSalesCount:commands[5], status:true);
 
             return await _campaignRepository.CreateAsync(campaignItem);
         }

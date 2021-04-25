@@ -32,19 +32,19 @@ namespace CampaignModule.Core.Repositories
             
             var baseQuantity = orderEntity.Quantity;
 
-            if (campaignList != null && campaignList.Count > 0)
+            if (campaignList != null && campaignList.Count > 0 && campaignList.FirstOrDefault(c => c.ProductCode.Equals(orderEntity.ProductCode) && c.Status && c.TargetSalesCount > 0) != null)
             {
                 //Önce kampanyayı al.
-                var currentCampaign = campaignList.First(c => c.ProductCode.Equals(orderEntity.ProductCode) && c.Status && c.TargetSalesCount > 0);
+                var currentCampaign = campaignList.FirstOrDefault(c => c.ProductCode.Equals(orderEntity.ProductCode) && c.Status && c.TargetSalesCount > 0);
 
                 //Eğer quantity kampanya stoğundan küçük ise, quantity kadar kampanyadan faydalansın. 
                 //Hem kampanya stoğundan düşecek hem product stoğundan düşecek.
-                if (currentCampaign.TargetSalesCount <= orderEntity.Quantity)
+                if (currentCampaign != null && currentCampaign.TargetSalesCount <= orderEntity.Quantity)
                 {
                     #region Order With Campaign
 
                     orderEntity.CampaignCode = currentCampaign.Name;
-                    orderEntity.Price = product.CampaignPrice;
+                    orderEntity.Price = product.Price;
                     orderEntity.Quantity = currentCampaign.TargetSalesCount; //kampanya stoğundan fazla sipariş var zaten. hepsini alabilir.
 
                     //Bu siparişi kaydet
@@ -71,7 +71,7 @@ namespace CampaignModule.Core.Repositories
 
                     #region Order Without Campaign if Needed
 
-                    var quantityControl = baseQuantity - currentCampaign.TargetSalesCount;
+                    var quantityControl = baseQuantity - orderEntity.Quantity;
 
                     if (quantityControl > 0)
                     {
@@ -101,12 +101,12 @@ namespace CampaignModule.Core.Repositories
 
                     #endregion
                 }
-                else
+                else if (currentCampaign != null && currentCampaign.TargetSalesCount > orderEntity.Quantity)
                 {
                     #region Order With Campaign
 
                     orderEntity.CampaignCode = currentCampaign.Name;
-                    orderEntity.Price = product.CampaignPrice;
+                    orderEntity.Price = product.Price;
 
                     //Bu siparişi kaydet
                     orderList.Add(orderEntity);
@@ -179,7 +179,7 @@ namespace CampaignModule.Core.Repositories
                         new object[] 
                             { 
                                 orderEntity.ProductCode,
-                                orderEntity.Quantity 
+                                baseQuantity
                             }
                     );          
         }

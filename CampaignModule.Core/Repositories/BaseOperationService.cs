@@ -1,10 +1,7 @@
-﻿using CampaignModule.Domain.Base;
-using CampaignModule.Utilities;
+﻿using CampaignModule.Utilities;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CampaignModule.Core.Repositories
@@ -14,38 +11,22 @@ namespace CampaignModule.Core.Repositories
         protected virtual async Task<string> ReadJson(string storePath)
         {
             if (!FileHelper.GetInstance().CheckFileExist(storePath))
-                File.Create(storePath);
+                File.Create(storePath).Close();
 
             var jsonString = string.Empty;
 
             byte[] fileContents = File.ReadAllBytes(storePath);
+            
             using (MemoryStream memoryStream = new MemoryStream(fileContents))
             {
-                using (TextReader textReader = new StreamReader(memoryStream))
+                using (StreamReader textReader = new StreamReader(memoryStream))
                 {
                     jsonString = await textReader.ReadToEndAsync();
+                    textReader.Close();                    
                 }
+
+                memoryStream.Flush();
             }
-
-            //using (var fs = new FileStream(storePath, FileMode.Open, FileAccess.Read))
-            //{
-            //    using (var sr = new StreamReader(fs, Encoding.UTF8))
-            //    {
-            //        jsonString = await sr.ReadToEndAsync();
-
-            //        sr.Close();
-            //    }
-
-            //    fs.Close();
-            //}
-
-
-            //using (var ms = new MemoryStream())
-            //{
-            //    ms.Position = 0;
-            //    using var sr = new StreamReader(ms);
-            //    jsonString = await sr.ReadToEndAsync();
-            //}
 
             return jsonString;
         }
@@ -56,9 +37,12 @@ namespace CampaignModule.Core.Repositories
             {
                 var fullPath = FileHelper.GetInstance().GetCombinedStoreFolderPath(storePath);
 
+                //File.CreateText(fullPath).Close();
+
                 using (StreamWriter tw = new StreamWriter(fullPath))
                 {
-                    await tw.WriteAsync(jsonData); 
+                    await tw.WriteAsync(jsonData);
+                    tw.Close();
                 }
             }
             catch (Exception ex)
