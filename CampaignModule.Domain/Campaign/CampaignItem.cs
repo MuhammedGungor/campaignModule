@@ -22,6 +22,7 @@ namespace CampaignModule.Domain.Campaign
             this.PriceManipulationLimit = Convert.ToInt32(priceManipulationLimit);
             this.TargetSalesCount = Convert.ToInt32(targetSalesCount);
             this.Status = status;
+            this.RemainingDuration = Convert.ToInt32(duration);
         }
 
         public string Name { get; set; }
@@ -33,5 +34,6 @@ namespace CampaignModule.Domain.Campaign
         public int Turnover { get; set; }
         public int TotalSales { get; set; }
         public int AverageItemPrice { get; set; }
+        public int RemainingDuration { get; set; }
     }
 }

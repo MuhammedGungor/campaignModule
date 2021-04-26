@@ -34,7 +34,7 @@ namespace CampaignModule.Core.Repositories
                 throw new Exception(Constants.General.CreateErrorMessage);
         }
 
-        public async Task<string> GetAsync(string id)
+        public async Task<ProductItem> GetAsync(string id)
         {
             var productList = await base.GetValuesFromFolder<List<ProductItem>>(Constants.ProductConstant.StorePath);
 
@@ -45,8 +45,31 @@ namespace CampaignModule.Core.Repositories
 
             if (product == null)
                 throw new Exception(Constants.ProductConstant.ProductNotFound);
-            
-            return ResponseHelper.GetInstance().GetResponse(Constants.ProductConstant.GetProductMessage, new object[] { product.ProductCode, product.Price, product.Stock });
+
+            return product;
+        }
+
+        public async Task<bool> UpdateAsync(ProductItem product)
+        {
+            var productList = await base.GetValuesFromFolder<List<ProductItem>>(Constants.ProductConstant.StorePath);
+
+            if (productList == null && productList.Count == 0)
+                throw new Exception(Constants.General.CreateErrorMessage);
+
+            var oldProduct = productList.FirstOrDefault(c => c.ProductCode.Equals(product.ProductCode));
+
+            if (oldProduct == null)
+                throw new Exception(Constants.General.CreateErrorMessage);
+
+            productList.Remove(oldProduct);
+
+            productList.Add(product);
+
+            var jsonable = JsonConvert.SerializeObject(productList);
+
+            var updateResponse = await base.WriteJson(Constants.ProductConstant.StorePath, jsonable);
+
+            return updateResponse;   
         }
     }
 }

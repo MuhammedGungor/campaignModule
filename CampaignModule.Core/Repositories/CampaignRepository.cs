@@ -34,7 +34,14 @@ namespace CampaignModule.Core.Repositories
                 throw new Exception(Constants.General.CreateErrorMessage);
         }
 
-        public async Task<string> GetAsync(string id)
+        public async Task<List<CampaignItem>> GetAll()
+        {
+            var campaignList = await base.GetValuesFromFolder<List<CampaignItem>>(Constants.CampaignConstant.StorePath);
+
+            return campaignList;
+        }
+
+        public async Task<CampaignItem> GetAsync(string id)
         {
             var campaignList = await base.GetValuesFromFolder<List<CampaignItem>>(Constants.CampaignConstant.StorePath);
 
@@ -63,16 +70,30 @@ namespace CampaignModule.Core.Repositories
                 }
             }
 
-            return ResponseHelper.GetInstance().GetResponse(Constants.CampaignConstant.GetCampaignMessage, 
-                    new object[] 
-                    {  
-                        campaign.Name,
-                        campaign.Status ? "Active" : "Ended",
-                        campaign.TargetSalesCount,
-                        campaign.TotalSales,
-                        campaign.Turnover,
-                        campaign.AverageItemPrice
-                    });
+            return campaign;
+        }
+
+        public async Task<bool> UpdateAsync(CampaignItem campaign)
+        {
+            var campaignList = await base.GetValuesFromFolder<List<CampaignItem>>(Constants.CampaignConstant.StorePath);
+
+            if (campaignList == null && campaignList.Count == 0)
+                throw new Exception(Constants.General.CreateErrorMessage);
+
+            var oldCampaign = campaignList.FirstOrDefault(c => c.Name.Equals(campaign.Name));
+
+            if (oldCampaign == null)
+                throw new Exception(Constants.General.CreateErrorMessage);
+
+            campaignList.Remove(oldCampaign);
+
+            campaignList.Add(campaign);
+
+            var jsonable = JsonConvert.SerializeObject(campaignList);
+
+            var updateResponse = await base.WriteJson(Constants.CampaignConstant.StorePath, jsonable);
+
+            return updateResponse;
         }
     }
 }

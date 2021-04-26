@@ -51,7 +51,7 @@ namespace CampaignModule.Core.Repositories
             return true;
         }
 
-        protected virtual async Task<TEntity> GetValuesFromFolder<TEntity>(string storePath)
+        public virtual async Task<TEntity> GetValuesFromFolder<TEntity>(string storePath)
         {
             var fullPath = FileHelper.GetInstance().GetCombinedStoreFolderPath(storePath);
 

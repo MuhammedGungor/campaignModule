@@ -13,7 +13,6 @@ namespace CampaignModule.Core.Repositories
 {
     public class OrderRepository : BaseOperationService, IOrderRepository<OrderItem>
     {
-
         public async Task<string> CreateAsync(OrderItem orderEntity)
         {
             var orderList = await base.GetValuesFromFolder<List<OrderItem>>(Constants.OrderConstant.StorePath);

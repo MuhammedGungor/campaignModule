@@ -1,4 +1,5 @@
 ﻿using CampaignModule.Domain.Product;
+using CampaignModule.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,7 +25,9 @@ namespace CampaignModule.Service.Product
 
         public async Task<string> GetAsync(List<string> commands)
         {
-            return await _productRepository.GetAsync(commands[1]);
+            var product = await _productRepository.GetAsync(commands[1]);
+
+            return ResponseHelper.GetInstance().GetResponse(Constants.ProductConstant.GetProductMessage, new object[] { product.ProductCode, product.Price, product.Stock });           
         }
     }
 }

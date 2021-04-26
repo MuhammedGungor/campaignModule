@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CampaignModule.Domain.Product
 {
-    public interface IProductRepository<TEntity> : ICreationService<TEntity>, IGetService where TEntity : class
+    public interface IProductRepository<TEntity> : ICreationService<TEntity>, IGetService<TEntity> where TEntity : class
     {
-
+        Task<bool> UpdateAsync(ProductItem product);
     }
 }
