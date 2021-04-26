@@ -37,8 +37,6 @@ namespace CampaignModule.Core.Repositories
             {
                 var fullPath = FileHelper.GetInstance().GetCombinedStoreFolderPath(storePath);
 
-                //File.CreateText(fullPath).Close();
-
                 using (StreamWriter tw = new StreamWriter(fullPath))
                 {
                     await tw.WriteAsync(jsonData);

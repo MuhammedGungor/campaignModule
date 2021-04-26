@@ -2,9 +2,11 @@
 using CampaignModule.Domain.Campaign;
 using CampaignModule.Domain.Order;
 using CampaignModule.Domain.Product;
+using CampaignModule.Domain.Timer;
 using CampaignModule.Service.Campaign;
 using CampaignModule.Service.Order;
 using CampaignModule.Service.Product;
+using CampaignModule.Service.Timer;
 using CampaignModule.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -41,6 +43,8 @@ namespace CampaignModule.Command
                 .AddSingleton<ICampaignRepository<CampaignItem>, CampaignRepository>()
                 .AddSingleton<IOrderService, OrderService>()
                 .AddSingleton<IOrderRepository<OrderItem>, OrderRepository>()
+                .AddSingleton<ITimerService, TimerService>()
+                .AddSingleton<ITimerRepository<TimerItem>, TimerRepository>()
                 .BuildServiceProvider();
 
             return serviceProvider;
@@ -62,7 +66,6 @@ namespace CampaignModule.Command
                     //Komutu işlemek lazım. 
                     if (!string.IsNullOrEmpty(command))
                     {
-
                         var commandParts = CommandHelper.GetInstance().PrepareCommandBase(command);
 
                         //Bu komutlara göre sistem bir iş yapacak. Örneğin, ürün oluşturma veya ürün görüntüleme.
@@ -103,8 +106,12 @@ namespace CampaignModule.Command
                                 Console.WriteLine(campaignGetResponse);
 
                                 break;
-                            case General.IncreaseTimeCommand:
-                                Console.WriteLine(General.IncreaseTimeCommand);
+                            case TimerConstant.CreateCommand:
+                                var timeCreateService = serviceProvider.GetService<ITimerService>();
+                                var timerResponse = await timeCreateService.CreateAsync(commandParts);
+
+                                Console.WriteLine(timerResponse);
+
                                 break;
                             default:
                                 break;
