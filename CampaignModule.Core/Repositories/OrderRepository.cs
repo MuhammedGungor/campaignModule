@@ -20,33 +20,29 @@ namespace CampaignModule.Core.Repositories
             if (orderList == null)
                 orderList = new List<OrderItem>();
 
-            //Ürünü getir. Sonrasında ürünü güncelleyeceksin. Ürünün stoğundan düşerek.
             var productList = await base.GetValuesFromFolder<List<ProductItem>>(Constants.ProductConstant.StorePath);
 
             var product = productList.First(c => c.ProductCode.Equals(orderEntity.ProductCode));
 
-            //Eğer bu ürüne ait kampanya varsa ve aktifse ve quantitysi yeterliyse
-            //kampanya fiyatı ile sat
             var campaignList = await base.GetValuesFromFolder<List<CampaignItem>>(Constants.CampaignConstant.StorePath);
             
             var baseQuantity = orderEntity.Quantity;
 
             if (campaignList != null && campaignList.Count > 0 && campaignList.FirstOrDefault(c => c.ProductCode.Equals(orderEntity.ProductCode) && c.Status && c.TargetSalesCount > 0) != null)
             {
-                //Önce kampanyayı al.
+                //First, get the campaign.
                 var currentCampaign = campaignList.FirstOrDefault(c => c.ProductCode.Equals(orderEntity.ProductCode) && c.Status && c.TargetSalesCount > 0);
 
-                //Eğer quantity kampanya stoğundan küçük ise, quantity kadar kampanyadan faydalansın. 
-                //Hem kampanya stoğundan düşecek hem product stoğundan düşecek.
+                //It will be decrease both from the campaign stock and from the product stock.
                 if (currentCampaign != null && currentCampaign.TargetSalesCount <= orderEntity.Quantity)
                 {
                     #region Order With Campaign
 
                     orderEntity.CampaignCode = currentCampaign.Name;
-                    orderEntity.Price = product.Price;
-                    orderEntity.Quantity = currentCampaign.TargetSalesCount; //kampanya stoğundan fazla sipariş var zaten. hepsini alabilir.
+                    orderEntity.Price = product.CampaignPrice;
+                    orderEntity.Quantity = currentCampaign.TargetSalesCount; //There are already more orders than the campaign stock. can take them all.
 
-                    //Bu siparişi kaydet
+                    //save order
                     orderList.Add(orderEntity);
 
                     var campaignOrderJson = JsonConvert.SerializeObject(orderList);
@@ -105,7 +101,7 @@ namespace CampaignModule.Core.Repositories
                     #region Order With Campaign
 
                     orderEntity.CampaignCode = currentCampaign.Name;
-                    orderEntity.Price = product.Price;
+                    orderEntity.Price = product.CampaignPrice;
 
                     //Bu siparişi kaydet
                     orderList.Add(orderEntity);
@@ -115,6 +111,9 @@ namespace CampaignModule.Core.Repositories
                     await base.WriteJson(Constants.OrderConstant.StorePath, campaignOrderJson);
 
                     #endregion
+
+                    //Every order create a demand. So campaign price should increase.
+                    var priceIncreaseRate = ((double)orderEntity.Quantity / (double)currentCampaign.TargetSalesCount * 0.1);
 
                     #region Update Campaign
 
@@ -132,6 +131,8 @@ namespace CampaignModule.Core.Repositories
 
                     productList.Remove(product);
 
+                    product.CampaignPrice += Convert.ToInt32(product.CampaignPrice * priceIncreaseRate);
+
                     product.Stock -= orderEntity.Quantity;
 
                     productList.Add(product);
@@ -145,8 +146,7 @@ namespace CampaignModule.Core.Repositories
             }
             else
             {
-                //Kampanya yoksa normal fiyattan ver.
-
+                //If there is no campaign. Offer at normal price
                 #region Order Without Campaign
 
                 orderEntity.CampaignCode = string.Empty;

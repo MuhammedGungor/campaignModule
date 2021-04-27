@@ -19,6 +19,7 @@ namespace CampaignModule.Domain.Product
             this.Price = Convert.ToInt32(price);
             this.ProductCode = code;
             this.Stock = Convert.ToInt32(stock);
+            this.CampaignPrice = Convert.ToInt32(price);
         }
 
         public string ProductCode { get; set; }

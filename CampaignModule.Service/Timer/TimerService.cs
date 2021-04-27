@@ -49,12 +49,17 @@ namespace CampaignModule.Service.Timer
                         if (product != null)
                         {
                             var limitCalculatedValue = product.Price - (product.Price * campaign.PriceManipulationLimit / 100);
-                            var priceFutureValue = product.Price - 5;
+
+                            var rateOfIncrease = 0.5 * 1 / (double)campaign.RemainingDuration;
+
+                            var decreaseValue = Convert.ToInt32(product.CampaignPrice * rateOfIncrease);
+
+                            var priceFutureValue = product.CampaignPrice - decreaseValue;
 
                             if (limitCalculatedValue <= priceFutureValue)
                             {
                                 //ürünü yeni kampanyalı fiyatıyla güncelle.
-                                product.Price = priceFutureValue;
+                                product.CampaignPrice = priceFutureValue;
                                 await _productRepository.UpdateAsync(product);
 
                                 //kampanya kalan süresi güncellenir.

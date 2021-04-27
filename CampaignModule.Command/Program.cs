@@ -45,7 +45,7 @@ namespace CampaignModule.Command
                 .AddSingleton<IOrderService, OrderService>()
                 .AddSingleton<IOrderRepository<OrderItem>, OrderRepository>()
                 .AddSingleton<ITimerService, TimerService>()
-                .AddSingleton<ITimerRepository<TimerItem>, TimerRepository>()                
+                .AddSingleton<ITimerRepository<TimerItem>, TimerRepository>()
                 .BuildServiceProvider();
 
             return serviceProvider;
