@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace CampaignModule.Domain.Campaign
 {
-    public interface ICampaignRepository<TEntity> : ICreationService<TEntity>, IGetService<TEntity> where TEntity : class
+    public interface ICampaignRepository<TEntity> : ICreationService<TEntity>
+                                                    , IGetService<TEntity>
+                                                    , IListService<List<TEntity>> where TEntity : class
     {
-        public Task<List<CampaignItem>> GetAll();
         public Task<bool> UpdateAsync(CampaignItem campaign);
     }
 }

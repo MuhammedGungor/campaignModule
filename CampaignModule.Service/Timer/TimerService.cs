@@ -1,6 +1,7 @@
 ﻿using CampaignModule.Domain.Campaign;
 using CampaignModule.Domain.Product;
 using CampaignModule.Domain.Timer;
+using CampaignModule.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,10 +12,10 @@ namespace CampaignModule.Service.Timer
     public class TimerService : ITimerService
     {
         private readonly ITimerRepository<TimerItem> _timerRepository;
-        private readonly ICampaignRepository<List<CampaignItem>> _campaignRepository;
+        private readonly ICampaignRepository<CampaignItem> _campaignRepository;
         private readonly IProductRepository<ProductItem> _productRepository;
 
-        public TimerService(ITimerRepository<TimerItem> timerRepository,IProductRepository<ProductItem> productRepository, ICampaignRepository<List<CampaignItem>> campaignRepository)
+        public TimerService(ITimerRepository<TimerItem> timerRepository,IProductRepository<ProductItem> productRepository, ICampaignRepository<CampaignItem> campaignRepository)
         {
             this._timerRepository = timerRepository;
             this._campaignRepository = campaignRepository;
@@ -30,9 +31,9 @@ namespace CampaignModule.Service.Timer
 
             var timerEntity = new TimerItem() { Hour = hour };
 
-            await _timerRepository.CreateAsync(timerEntity);
+            var response = await _timerRepository.CreateAsync(timerEntity);
             
-            var campaignList = await _campaignRepository.GetAll();
+            var campaignList = await _campaignRepository.GetAllAsync();
 
             if (campaignList != null && campaignList.Count > 0)
             {
@@ -74,6 +75,8 @@ namespace CampaignModule.Service.Timer
                     }
                 }
             }
+
+            return response;
         }
     }
 }

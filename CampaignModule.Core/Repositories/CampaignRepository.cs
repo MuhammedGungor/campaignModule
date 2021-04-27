@@ -34,7 +34,7 @@ namespace CampaignModule.Core.Repositories
                 throw new Exception(Constants.General.CreateErrorMessage);
         }
 
-        public async Task<List<CampaignItem>> GetAll()
+        public async Task<List<CampaignItem>> GetAllAsync()
         {
             var campaignList = await base.GetValuesFromFolder<List<CampaignItem>>(Constants.CampaignConstant.StorePath);
 

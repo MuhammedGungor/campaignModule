@@ -10,6 +10,7 @@ using CampaignModule.Service.Timer;
 using CampaignModule.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,7 +45,7 @@ namespace CampaignModule.Command
                 .AddSingleton<IOrderService, OrderService>()
                 .AddSingleton<IOrderRepository<OrderItem>, OrderRepository>()
                 .AddSingleton<ITimerService, TimerService>()
-                .AddSingleton<ITimerRepository<TimerItem>, TimerRepository>()
+                .AddSingleton<ITimerRepository<TimerItem>, TimerRepository>()                
                 .BuildServiceProvider();
 
             return serviceProvider;

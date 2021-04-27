@@ -27,7 +27,7 @@ namespace CampaignModule.Service.Product
         {
             var product = await _productRepository.GetAsync(commands[1]);
 
-            return ResponseHelper.GetInstance().GetResponse(Constants.ProductConstant.GetProductMessage, new object[] { product.ProductCode, product.Price, product.Stock });           
+            return ResponseHelper.GetInstance().GetResponse(Constants.ProductConstant.GetProductMessage, new object[] { product.ProductCode, product.Price, product.Stock });
         }
     }
 }

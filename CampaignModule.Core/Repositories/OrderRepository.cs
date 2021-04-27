@@ -168,7 +168,7 @@ namespace CampaignModule.Core.Repositories
 
                 var productJson = JsonConvert.SerializeObject(productList);
 
-                await base.WriteJson(Constants.OrderConstant.StorePath, productJson);
+                await base.WriteJson(Constants.ProductConstant.StorePath, productJson);
 
                 #endregion
             }
