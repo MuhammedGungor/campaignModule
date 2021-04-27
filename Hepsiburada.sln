@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampaignModule.Command", "CampaignModule.Command\CampaignModule.Command.csproj", "{411BC8FA-652B-48CF-8909-568FD3FE212A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampaignModule.Command", "CampaignModule.Command\CampaignModule.Command.csproj", "{411BC8FA-652B-48CF-8909-568FD3FE212A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampaignModule.Domain", "CampaignModule.Domain\CampaignModule.Domain.csproj", "{1A9FF562-D783-4148-B84F-AEC35647E981}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampaignModule.Domain", "CampaignModule.Domain\CampaignModule.Domain.csproj", "{1A9FF562-D783-4148-B84F-AEC35647E981}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampaignModule.Core", "CampaignModule.Core\CampaignModule.Core.csproj", "{2ABBEA2F-42C7-4735-B62A-2A77FDFA5FC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampaignModule.Core", "CampaignModule.Core\CampaignModule.Core.csproj", "{2ABBEA2F-42C7-4735-B62A-2A77FDFA5FC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampaignModule.Utilities", "CampaignModule.Utilities\CampaignModule.Utilities.csproj", "{FB7B16D0-9009-41C3-B2CC-95AE61EBFB08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampaignModule.Utilities", "CampaignModule.Utilities\CampaignModule.Utilities.csproj", "{FB7B16D0-9009-41C3-B2CC-95AE61EBFB08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampaignModule.Service", "CampaignModule.Service\CampaignModule.Service.csproj", "{360F1167-BA50-4ABD-B124-47C9917B2C1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampaignModule.Service", "CampaignModule.Service\CampaignModule.Service.csproj", "{360F1167-BA50-4ABD-B124-47C9917B2C1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampaignModule.Tests", "CampaignModule.Tests\CampaignModule.Tests.csproj", "{B0EE4DA1-F398-42E5-9C0F-4A04610D98AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{360F1167-BA50-4ABD-B124-47C9917B2C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{360F1167-BA50-4ABD-B124-47C9917B2C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{360F1167-BA50-4ABD-B124-47C9917B2C1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0EE4DA1-F398-42E5-9C0F-4A04610D98AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0EE4DA1-F398-42E5-9C0F-4A04610D98AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0EE4DA1-F398-42E5-9C0F-4A04610D98AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0EE4DA1-F398-42E5-9C0F-4A04610D98AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
