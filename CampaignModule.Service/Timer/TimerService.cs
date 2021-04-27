@@ -4,6 +4,7 @@ using CampaignModule.Domain.Timer;
 using CampaignModule.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,13 +38,14 @@ namespace CampaignModule.Service.Timer
 
             if (campaignList != null && campaignList.Count > 0)
             {
+                campaignList = campaignList.Where(c => c.Status).ToList();
+
                 foreach (var campaign in campaignList)
                 {
                     var remainingTime = campaign.RemainingDuration;
 
                     if (remainingTime >= hour)
                     {
-                        //product.Price - (product.Price * campaign.Limit / 100) <= product.Price - 5
                         var product = await _productRepository.GetAsync(campaign.ProductCode);
 
                         if (product != null)
@@ -58,21 +60,21 @@ namespace CampaignModule.Service.Timer
 
                             if (limitCalculatedValue <= priceFutureValue)
                             {
-                                //ürünü yeni kampanyalı fiyatıyla güncelle.
+                                //Update product with campaign price
                                 product.CampaignPrice = priceFutureValue;
                                 await _productRepository.UpdateAsync(product);
 
-                                //kampanya kalan süresi güncellenir.
+                                //Update remaining duration of campaign
                                 campaign.RemainingDuration -= hour;
                                 await _campaignRepository.UpdateAsync(campaign);
                             }
                             else
                             {
-                                //kampanya kapatılır.
+                                //Close the campaign
                                 campaign.Status = false;
                                 await _campaignRepository.UpdateAsync(campaign);
 
-                                //ürünün fiyatı kendi fiyatına çekilir.
+                                //Product campaign price should be normal price
                                 product.CampaignPrice = product.Price;
                                 await _productRepository.UpdateAsync(product);
                             }
