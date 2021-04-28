@@ -23,6 +23,13 @@ namespace CampaignModule.Service.Product
             return await _productRepository.CreateAsync(productItem);
         }
 
+        public async Task<List<ProductItem>> GetAll()
+        {
+            var products = await _productRepository.GetAllAsync();
+
+            return products;
+        }
+
         public async Task<string> GetAsync(List<string> commands)
         {
             var product = await _productRepository.GetAsync(commands[1]);

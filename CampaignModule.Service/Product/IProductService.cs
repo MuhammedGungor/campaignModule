@@ -11,5 +11,7 @@ namespace CampaignModule.Service.Product
         Task<string> CreateAsync(List<string> commands);
 
         Task<string> GetAsync(List<string> commands);
+
+        Task<List<ProductItem>> GetAll();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CampaignModule.Domain.Campaign;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,6 @@ namespace CampaignModule.Service.Campaign
     {
         Task<string> CreateAsync(List<string> commands);
 
-        Task<string> GetAsync(List<string> commands);
+        Task<string> GetAsync(List<string> commands);        
     }
 }

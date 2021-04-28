@@ -10,12 +10,17 @@ namespace CampaignModule.Tests.Service
     public class ProductServiceTest
     {
         private readonly IProductService _productService;
-        private readonly List<string> productCreateCommand = new List<string> { "create_product","PTest","10","100" };
-        private readonly List<string> productGetCommand = new List<string> { "get_product_info", "PTest"};
+        private readonly List<string> productCreateCommand = new List<string>();
+        private readonly List<string> productGetCommand = new List<string>();
 
         public ProductServiceTest(IProductService productService)
         {
             this._productService = productService;
+
+            var randomGnr = new Random().Next(1, 99999);
+
+            this.productCreateCommand.AddRange(new List<string> { "create_product", $"TestProduct_{randomGnr}", "10", "100" });
+            this.productGetCommand.AddRange(new List<string> { "get_product_info", this.productCreateCommand[1] });
         }
 
         [Fact]
@@ -33,11 +38,31 @@ namespace CampaignModule.Tests.Service
         [Fact]
         public void Should_Get_A_Product()
         {
-            var response = _productService.GetAsync(productGetCommand);
+            try
+            {
+                var response = _productService.GetAsync(productGetCommand);
 
-            response.Wait();
+                response.Wait();
 
-            Assert.NotEmpty(response.Result);
+                Assert.NotEmpty(response.Result);
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null)
+                {
+                    Assert.Equal(Constants.ProductConstant.ProductNotFound, ex.InnerException.Message);
+                }
+            }
+        }
+
+        [Fact]
+        public void Should_Get_All_Products()
+        {
+            var productsResponse = _productService.GetAll();
+
+            productsResponse.Wait();
+
+            Assert.NotEmpty(productsResponse.Result);
         }
     }
 }

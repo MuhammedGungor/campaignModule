@@ -34,14 +34,21 @@ namespace CampaignModule.Core.Repositories
                 throw new Exception(Constants.General.CreateErrorMessage);
         }
 
+        public async Task<List<ProductItem>> GetAllAsync()
+        {
+            var products = await base.GetValuesFromFolder<List<ProductItem>>(Constants.ProductConstant.StorePath);
+
+            return products;
+        }
+
         public async Task<ProductItem> GetAsync(string id)
         {
             var productList = await base.GetValuesFromFolder<List<ProductItem>>(Constants.ProductConstant.StorePath);
 
             if (productList != null && productList.Count == 0)
-                throw new Exception(Constants.ProductConstant.ProductsEmpty);
+                throw new Exception(message: Constants.ProductConstant.ProductsEmpty);
 
-            var product = productList.First(c => c.ProductCode == id);
+            var product = productList.FirstOrDefault(c => c.ProductCode == id);
 
             if (product == null)
                 throw new Exception(Constants.ProductConstant.ProductNotFound);
