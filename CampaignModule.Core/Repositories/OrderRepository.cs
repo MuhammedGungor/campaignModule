@@ -22,7 +22,10 @@ namespace CampaignModule.Core.Repositories
 
             var productList = await base.GetValuesFromFolder<List<ProductItem>>(Constants.ProductConstant.StorePath);
 
-            var product = productList.First(c => c.ProductCode.Equals(orderEntity.ProductCode));
+            var product = productList.FirstOrDefault(c => c.ProductCode.Equals(orderEntity.ProductCode));
+
+            if (product == null)
+                throw new Exception(Constants.ProductConstant.ProductNotFound);
 
             var campaignList = await base.GetValuesFromFolder<List<CampaignItem>>(Constants.CampaignConstant.StorePath);
             
